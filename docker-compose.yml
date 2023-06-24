@@ -1,0 +1,9 @@
+version: '3.5'
+
+services:
+  librodereclamaciones-web:
+    container_name: libro-reclamaciones-container
+    image: registry.gitlab.com/abexa/dashboard.abexa
+    ports:
+      - "5012:3000"
+    restart: always
