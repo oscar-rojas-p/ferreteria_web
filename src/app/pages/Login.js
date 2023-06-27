@@ -14,8 +14,17 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { notify } from '../../utils/utils';
 
+import { useConexBD } from '../../hooks/useConexBD';
+
 
 export const Login = () => {
+
+    const {listarPersonas} = useConexBD()
+
+    useEffect(() => {
+        listarPersonas()
+    })
+
     const [nombre,setNombre] = useState('')
     const [contraseña,setContraseña] = useState('')
     const  history = useHistory();
