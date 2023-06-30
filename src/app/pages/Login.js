@@ -19,21 +19,30 @@ import { useConexBD } from '../../hooks/useConexBD';
 
 export const Login = () => {
 
-    const {listarPersonas} = useConexBD()
+    const {listarPersonas,registrarPersona,usuarios,listarUsuarios} = useConexBD()
 
     useEffect(() => {
-        listarPersonas()
-    })
+        // listarPersonas()
+        listarUsuarios()
+        console.log("hola")
+    },[])
 
     const [nombre,setNombre] = useState('')
     const [contraseña,setContraseña] = useState('')
     const  history = useHistory();
-    const [usuarioCreado,setUsuarioCreado] = useState('')
-    const [contraseñaCreada,setContraseñaCreada] = useState('')
+
+    
+    const [nomNew,setNomNew] = useState('')
+    const [apePNew,setApePNew] = useState('')
+    const [apeMNew,setApeMNew] = useState('')
+    const [correoNew,setCorreoNew] = useState('')
+    const [contraseñaNew,setContraseñaNew] = useState('')
+    
+
 
     const [error,setError] = useState(false)
     const [error2,setError2] = useState(false)
-    const usuarios = [{user:'admin',password:'admin'},{user:'root',password:'123'}]
+    // const usuarios = [{user:'admin',password:'admin'},{user:'root',password:'123'}]
     const handleSubmit = (e) => {
         const usuario = e.target[0].value
         const contraseña = e.target[1].value
@@ -43,14 +52,14 @@ export const Login = () => {
             return
         }else{
             const user = usuarios.find(
-                (u) => u.user === usuario && u.password === contraseña
-              )
-              if(user){
-                  notify(`Bienvenido a Alpa usuario: ${usuario}`,'success')
-                  cambiarVista()
-              }else{
+                (u) => u.nomUsuario === usuario && u.claveUsuario === contraseña
+            )
+            if(user){
+                notify(`Bienvenido a Alpa usuario: ${usuario}`,'success')
+                cambiarVista()
+            }else{
                 notify('Error al ingresar usuario y/o contraseña','error')
-              }
+            }
         }
         setError(false)
 
@@ -62,8 +71,12 @@ export const Login = () => {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
-        setUsuarioCreado('')
-        setContraseñaCreada('')
+        setNomNew('')
+        setApePNew('')
+        setApeMNew('')
+        setCorreoNew('')
+        setContraseñaNew('')
+        
         setOpen(true);
     };
 
@@ -73,10 +86,11 @@ export const Login = () => {
     };
 
     const comprobarRegistroNuevo = () => {
-        if(usuarioCreado=='' || contraseñaCreada==''){
+        if(correoNew =='' || contraseñaNew ==''){
             setError2(true)
             return
         }else{
+            registrarPersona(nomNew,apePNew,apeMNew,correoNew)
             handleClose()
         }
     }
@@ -115,33 +129,19 @@ export const Login = () => {
                             <DialogContentText id="alert-dialog-description">
                                 <div>
                                     <div style={{display:'flex',width:'100%'}}>
-                                        <input placeholder='Nombre' value={usuarioCreado} onChange={(e) => setUsuarioCreado(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'190px'}} type='text'></input>
-                                        <input placeholder='Apellido' value={usuarioCreado} onChange={(e) => setUsuarioCreado(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'190px',marginLeft:'20px'}} type='text'></input>
+                                    <input placeholder='Nombres' value={nomNew} onChange={(e) => setNomNew(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'400px'}} type='text'></input>
+                                    </div>
+                                    <div style={{display:'flex',width:'100%',marginTop:'20px'}}>
+                                        <input placeholder='Apellido Paterno' value={apePNew} onChange={(e) => setApePNew(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'190px'}} type='text'></input>
+                                        <input placeholder='Apellido Materno' value={apeMNew} onChange={(e) => setApeMNew(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'190px',marginLeft:'20px'}} type='text'></input>
                                     </div>
                                     <div style={{marginTop:'20px'}}>
-                                        <input placeholder='Correo Electronico' value={contraseñaCreada} onChange={(e) => setContraseñaCreada(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'400px'}} type='password'></input>
+                                        <input placeholder='Correo Electronico' value={correoNew} onChange={(e) => setCorreoNew(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'400px'}} type='text'></input>
                                     </div>
                                     <div style={{marginTop:'20px',marginBottom:'20px'}}>
-                                        <input placeholder='Contraseña' value={contraseñaCreada} onChange={(e) => setContraseñaCreada(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'400px'}} type='password'></input>
+                                        <input placeholder='Contraseña' value={contraseñaNew} onChange={(e) => setContraseñaNew(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'400px'}} type='password'></input>
                                     </div>
-                                    <FormControl>
-                                        <FormLabel id="demo-row-radio-buttons-group-label">Género</FormLabel>
-                                        <RadioGroup
-                                            row
-                                            aria-labelledby="demo-row-radio-buttons-group-label"
-                                            name="row-radio-buttons-group"
-                                        >
-                                            <FormControlLabel value="female" control={<Radio />} label="Mujer" />
-                                            <FormControlLabel value="male" control={<Radio />} label="Hombre" />
-                                            <FormControlLabel value="other" control={<Radio />} label="Otro" />
-                                            <FormControlLabel
-                                            value="disabled"
-                                            disabled
-                                            control={<Radio />}
-                                            label="LGTBQ+"
-                                            />
-                                        </RadioGroup>
-                                    </FormControl>
+                                    
                                 </div>
                                 {error2 && <p style={{color:'red',textAlign:'center'}}>Todos los campos son necesarios</p>}
                             </DialogContentText>

@@ -1,14 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 
 const urlBase = process.env.REACT_APP_ATU_API + "/api/Ferreteria";
 
 export const useConexBD = () => {
+    const [usuarios,setUsuarios] = useState([])
 
     const listarPersonas = async () => {
-        const response  = await fetch(`${urlBase}/listarPersonas`)
+        await fetch(`${urlBase}/listarPersonas`).then(response => {
+            response.json().then((data) => {
+                console.log(data);
+            })
+        })
+    }
 
-        console.log("response -> ",response)
+    const registrarPersona = async (nombre, apallidoP, apellidoM, correo) => {
+        let urlEnd = `/registrarPersona?nombre=${nombre}&apePaterno=${apallidoP}&apeMaterno=${apellidoM}&correo=${correo}&codigoPersona=1`
+        await fetch(urlBase + urlEnd)
+        
+    }
+
+    const listarUsuarios = async () => {
+        await fetch(`${urlBase}/listarUsuarios`).then(response => {
+            response.json().then((data) => {
+                setUsuarios(data.content) 
+            })
+        })
     }
     
-    return {listarPersonas}
+    return {listarPersonas,registrarPersona,usuarios,listarUsuarios}
 }
