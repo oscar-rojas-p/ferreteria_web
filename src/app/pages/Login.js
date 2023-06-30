@@ -19,7 +19,7 @@ import { useConexBD } from '../../hooks/useConexBD';
 
 export const Login = () => {
 
-    const {personas,listarPersonas,registrarPersona,usuarios,listarUsuarios,registrarUsuario} = useConexBD()
+    const {personas,listarPersonas,registrarPersona,usuarios,listarUsuarios,registrarUsuario,productos,listarProductos,registrarProducto} = useConexBD()
 
     useEffect(() => {
         listarPersonas()
@@ -48,7 +48,7 @@ export const Login = () => {
             //aqui agregar el codigo de la persona CodPersona en el listarpersona
             console.log("test")
             let codigoPersonaRegistrada = personas.find(elm => elm.correoElectronico == correoNew)
-            codigoPersonaRegistrada = codigoPersonaRegistrada.CodPersona
+            codigoPersonaRegistrada = codigoPersonaRegistrada.codPersona
             registrarUsuario(correoNew,contraseñaNew,codigoPersonaRegistrada)
         }
         console.log("hola 2")
@@ -108,7 +108,7 @@ export const Login = () => {
         }else{
             await registrarPersona(nomNew,apePNew,apeMNew,correoNew)
             listarPersonas()
-
+            notify(`Usuario ${nomNew} registrado con exito`,'success')
             handleClose()
         }
     }
