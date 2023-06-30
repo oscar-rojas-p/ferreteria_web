@@ -19,14 +19,19 @@ import { useConexBD } from '../../hooks/useConexBD';
 
 export const Login = () => {
 
-    const {listarPersonas,registrarPersona,usuarios,listarUsuarios} = useConexBD()
+    const {personas,listarPersonas,registrarPersona,usuarios,listarUsuarios,registrarUsuario} = useConexBD()
 
     useEffect(() => {
-        // listarPersonas()
-        listarUsuarios()
+        listarPersonas()
         console.log("hola")
+    },[usuarios])
+    
+    useEffect(() => {
+        listarUsuarios()
+        console.log("hola 3")
     },[])
 
+    
     const [nombre,setNombre] = useState('')
     const [contraseña,setContraseña] = useState('')
     const  history = useHistory();
@@ -38,6 +43,17 @@ export const Login = () => {
     const [correoNew,setCorreoNew] = useState('')
     const [contraseñaNew,setContraseñaNew] = useState('')
     
+    useEffect(() => {
+        if(correoNew != ''){
+            //aqui agregar el codigo de la persona CodPersona en el listarpersona
+            console.log("test")
+            let codigoPersonaRegistrada = personas.find(elm => elm.correoElectronico == correoNew)
+            codigoPersonaRegistrada = codigoPersonaRegistrada.CodPersona
+            registrarUsuario(correoNew,contraseñaNew,codigoPersonaRegistrada)
+        }
+        console.log("hola 2")
+    },[personas])
+
 
 
     const [error,setError] = useState(false)
@@ -85,12 +101,14 @@ export const Login = () => {
         setOpen(false);
     };
 
-    const comprobarRegistroNuevo = () => {
+    const comprobarRegistroNuevo = async () => {
         if(correoNew =='' || contraseñaNew ==''){
             setError2(true)
             return
         }else{
-            registrarPersona(nomNew,apePNew,apeMNew,correoNew)
+            await registrarPersona(nomNew,apePNew,apeMNew,correoNew)
+            listarPersonas()
+
             handleClose()
         }
     }
@@ -107,7 +125,7 @@ export const Login = () => {
                         <button className='rounded-xl bg-white text-blue-800 font-medium py-4 px-5 hover:bg-orange-500 hover:shadow-inner hover:shadow-orange-800'>Iniciar sesion</button>
                     </form>
                     <div id="myDiv" onClick={handleClickOpen} className='text-white hover:text-blue-800 cursor-pointer pt-5 text-center'>¿Eres nuevo? Registrar Usuario</div>
-                    {error && <p style={{color:'red'}}>Todos los campos son necesarios</p>}
+                    {error && <div style={{color:'red'}}>Todos los campos son necesarios</div>}
                     <div className='py-10 w-full text-center cursor-pointer hover:text-orange-500' onClick={()=>cambiarVista()}>Continuar sin iniciar sesión</div>
                 </div>
             </div>
@@ -143,7 +161,7 @@ export const Login = () => {
                                     </div>
                                     
                                 </div>
-                                {error2 && <p style={{color:'red',textAlign:'center'}}>Todos los campos son necesarios</p>}
+                                {error2 && <div style={{color:'red',textAlign:'center'}}>Todos los campos son necesarios</div>}
                             </DialogContentText>
                         </DialogContent>
                     </div>
