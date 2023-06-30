@@ -8,6 +8,7 @@ import { Login } from '../pages/Login';
 import { Productos } from '../pages/Productos';
 import { Catalogo } from '../pages/Catalogo';
 import PageNotFound from '../pages/PageNotFound';
+import { Administrador } from '../pages/Administrador';
 export function PublicRoutes() {
     const [user,setUser] = useState([])
     return (
@@ -21,7 +22,8 @@ export function PublicRoutes() {
                     <Route exact path='/gestion' component={IndicadoresGestion} />
                     <Route exact path='/catalogo' component={Catalogo} />
                     <Route exact path='/login' component={Login} />
-                    <Route path="*" component={PageNotFound} />
+                    <Route exact path='/Administrador' component={Administrador} />
+                    <Route exact path="*" component={PageNotFound} />
                 </Switch>
             </LayoutMaster>
         </>
