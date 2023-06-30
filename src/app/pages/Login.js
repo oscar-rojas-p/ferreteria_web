@@ -14,17 +14,51 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { notify } from '../../utils/utils';
 
+import { useConexBD } from '../../hooks/useConexBD';
+
 
 export const Login = () => {
+
+    const {personas,listarPersonas,registrarPersona,usuarios,listarUsuarios,registrarUsuario} = useConexBD()
+
+    useEffect(() => {
+        listarPersonas()
+        console.log("hola")
+    },[usuarios])
+    
+    useEffect(() => {
+        listarUsuarios()
+        console.log("hola 3")
+    },[])
+
+    
     const [nombre,setNombre] = useState('')
     const [contraseña,setContraseña] = useState('')
     const  history = useHistory();
-    const [usuarioCreado,setUsuarioCreado] = useState('')
-    const [contraseñaCreada,setContraseñaCreada] = useState('')
+
+    
+    const [nomNew,setNomNew] = useState('')
+    const [apePNew,setApePNew] = useState('')
+    const [apeMNew,setApeMNew] = useState('')
+    const [correoNew,setCorreoNew] = useState('')
+    const [contraseñaNew,setContraseñaNew] = useState('')
+    
+    useEffect(() => {
+        if(correoNew != ''){
+            //aqui agregar el codigo de la persona CodPersona en el listarpersona
+            console.log("test")
+            let codigoPersonaRegistrada = personas.find(elm => elm.correoElectronico == correoNew)
+            codigoPersonaRegistrada = codigoPersonaRegistrada.CodPersona
+            registrarUsuario(correoNew,contraseñaNew,codigoPersonaRegistrada)
+        }
+        console.log("hola 2")
+    },[personas])
+
+
 
     const [error,setError] = useState(false)
     const [error2,setError2] = useState(false)
-    const usuarios = [{user:'admin',password:'admin'},{user:'root',password:'123'}]
+    // const usuarios = [{user:'admin',password:'admin'},{user:'root',password:'123'}]
     const handleSubmit = (e) => {
         const usuario = e.target[0].value
         const contraseña = e.target[1].value
@@ -34,14 +68,14 @@ export const Login = () => {
             return
         }else{
             const user = usuarios.find(
-                (u) => u.user === usuario && u.password === contraseña
-              )
-              if(user){
-                  notify(`Bienvenido a Alpa usuario: ${usuario}`,'success')
-                  cambiarVista()
-              }else{
+                (u) => u.nomUsuario === usuario && u.claveUsuario === contraseña
+            )
+            if(user){
+                notify(`Bienvenido a Alpa usuario: ${usuario}`,'success')
+                cambiarVista()
+            }else{
                 notify('Error al ingresar usuario y/o contraseña','error')
-              }
+            }
         }
         setError(false)
 
@@ -53,8 +87,12 @@ export const Login = () => {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
-        setUsuarioCreado('')
-        setContraseñaCreada('')
+        setNomNew('')
+        setApePNew('')
+        setApeMNew('')
+        setCorreoNew('')
+        setContraseñaNew('')
+        
         setOpen(true);
     };
 
@@ -63,11 +101,14 @@ export const Login = () => {
         setOpen(false);
     };
 
-    const comprobarRegistroNuevo = () => {
-        if(usuarioCreado=='' || contraseñaCreada==''){
+    const comprobarRegistroNuevo = async () => {
+        if(correoNew =='' || contraseñaNew ==''){
             setError2(true)
             return
         }else{
+            await registrarPersona(nomNew,apePNew,apeMNew,correoNew)
+            listarPersonas()
+
             handleClose()
         }
     }
@@ -84,7 +125,7 @@ export const Login = () => {
                         <button className='rounded-xl bg-white text-blue-800 font-medium py-4 px-5 hover:bg-orange-500 hover:shadow-inner hover:shadow-orange-800'>Iniciar sesion</button>
                     </form>
                     <div id="myDiv" onClick={handleClickOpen} className='text-white hover:text-blue-800 cursor-pointer pt-5 text-center'>¿Eres nuevo? Registrar Usuario</div>
-                    {error && <p style={{color:'red'}}>Todos los campos son necesarios</p>}
+                    {error && <div style={{color:'red'}}>Todos los campos son necesarios</div>}
                     <div className='py-10 w-full text-center cursor-pointer hover:text-orange-500' onClick={()=>cambiarVista()}>Continuar sin iniciar sesión</div>
                 </div>
             </div>
@@ -106,35 +147,21 @@ export const Login = () => {
                             <DialogContentText id="alert-dialog-description">
                                 <div>
                                     <div style={{display:'flex',width:'100%'}}>
-                                        <input placeholder='Nombre' value={usuarioCreado} onChange={(e) => setUsuarioCreado(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'190px'}} type='text'></input>
-                                        <input placeholder='Apellido' value={usuarioCreado} onChange={(e) => setUsuarioCreado(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'190px',marginLeft:'20px'}} type='text'></input>
+                                    <input placeholder='Nombres' value={nomNew} onChange={(e) => setNomNew(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'400px'}} type='text'></input>
+                                    </div>
+                                    <div style={{display:'flex',width:'100%',marginTop:'20px'}}>
+                                        <input placeholder='Apellido Paterno' value={apePNew} onChange={(e) => setApePNew(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'190px'}} type='text'></input>
+                                        <input placeholder='Apellido Materno' value={apeMNew} onChange={(e) => setApeMNew(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'190px',marginLeft:'20px'}} type='text'></input>
                                     </div>
                                     <div style={{marginTop:'20px'}}>
-                                        <input placeholder='Correo Electronico' value={contraseñaCreada} onChange={(e) => setContraseñaCreada(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'400px'}} type='password'></input>
+                                        <input placeholder='Correo Electronico' value={correoNew} onChange={(e) => setCorreoNew(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'400px'}} type='text'></input>
                                     </div>
                                     <div style={{marginTop:'20px',marginBottom:'20px'}}>
-                                        <input placeholder='Contraseña' value={contraseñaCreada} onChange={(e) => setContraseñaCreada(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'400px'}} type='password'></input>
+                                        <input placeholder='Contraseña' value={contraseñaNew} onChange={(e) => setContraseñaNew(e.target.value)} style={{border:'1px solid #cfcaca',borderRadius:'5px',padding:'5px',width:'400px'}} type='password'></input>
                                     </div>
-                                    <FormControl>
-                                        <FormLabel id="demo-row-radio-buttons-group-label">Género</FormLabel>
-                                        <RadioGroup
-                                            row
-                                            aria-labelledby="demo-row-radio-buttons-group-label"
-                                            name="row-radio-buttons-group"
-                                        >
-                                            <FormControlLabel value="female" control={<Radio />} label="Mujer" />
-                                            <FormControlLabel value="male" control={<Radio />} label="Hombre" />
-                                            <FormControlLabel value="other" control={<Radio />} label="Otro" />
-                                            <FormControlLabel
-                                            value="disabled"
-                                            disabled
-                                            control={<Radio />}
-                                            label="LGTBQ+"
-                                            />
-                                        </RadioGroup>
-                                    </FormControl>
+                                    
                                 </div>
-                                {error2 && <p style={{color:'red',textAlign:'center'}}>Todos los campos son necesarios</p>}
+                                {error2 && <div style={{color:'red',textAlign:'center'}}>Todos los campos son necesarios</div>}
                             </DialogContentText>
                         </DialogContent>
                     </div>
