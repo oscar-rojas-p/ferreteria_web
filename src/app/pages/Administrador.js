@@ -1,14 +1,14 @@
 import React from "react";
 import { CabeceraAdministrador } from "../components/CabeceraAdministrador"
 import { BodyAdministrador } from "../components/BodyAdministrador";
+import { LayoutMaster } from "../modules/layout/LayoutMaster";
 export const  Administrador = ()=>{
     return(
         <>
-            
-            <CabeceraAdministrador></CabeceraAdministrador>
-            <BodyAdministrador></BodyAdministrador>
-
-            <div className="w-full bg-white"></div>
+            <LayoutMaster>
+                <CabeceraAdministrador></CabeceraAdministrador>
+                <BodyAdministrador></BodyAdministrador>
+            </LayoutMaster>
         </>
     )
 }
