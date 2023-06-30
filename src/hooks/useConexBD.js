@@ -4,7 +4,8 @@ const urlBase = process.env.REACT_APP_ATU_API + "/api/Ferreteria";
 
 export const useConexBD = () => {
     const [usuarios,setUsuarios] = useState([])
-    const [personas,setPersonas] =useState([])
+    const [personas,setPersonas] = useState([])
+    const [productos,setProductos] = useState([])
 
     const listarPersonas = async () => {
         await fetch(`${urlBase}/listarPersonas`).then(response => {
@@ -47,6 +48,27 @@ export const useConexBD = () => {
         })
         
     }
+
+
+    const listarProductos = async () => {
+        await fetch(`${urlBase}/listarProductos`).then(response => {
+            response.json().then((data) => {
+                setProductos(data.content) 
+            })
+        })
+    }
+
+    const registrarProducto = async (nomProducto,abrevProducto,descripcionProducto,codigoProducto,codSubCategoria,cantidadMinima,cantidadMaxima,precioCompra,precioVenta,codMonedaCompra,codMonedaVenta,codUsuarioCreacion) => {
+        let urlEnd = `/registrarProducto?nomProducto=${nomProducto}&abrevProducto=${abrevProducto}&descripcionProducto=${descripcionProducto}&codigoProducto=${codigoProducto}&codSubCategoria=${codSubCategoria}&cantidadMinima=${cantidadMinima}&cantidadMaxima=${cantidadMaxima}&precioCompra=${precioCompra}&precioVenta=${precioVenta}&codMonedaCompra=${codMonedaCompra}&codMonedaVenta=${codMonedaVenta}&codUsuarioCreacion=${codUsuarioCreacion}`
+
+        let url = urlBase + urlEnd
+        const response = await fetch(url,{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            }
+        })
+    }
     
-    return {personas,listarPersonas,registrarPersona,usuarios,listarUsuarios,registrarUsuario}
+    return {personas,listarPersonas,registrarPersona,usuarios,listarUsuarios,registrarUsuario,productos,listarProductos,registrarProducto}
 }
