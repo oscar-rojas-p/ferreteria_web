@@ -16,7 +16,7 @@ export const useConexBD = () => {
     }
 
     const registrarPersona = async (nombre, apallidoP, apellidoM, correo) => {
-        let urlEnd = `/registrarPersona?nombre=${nombre}&apePaterno=${apallidoP}&apeMaterno=${apellidoM}&correo=${correo}&codigoPersona=1`
+        let urlEnd = `/registrarPersona?nombre=${nombre}&apePaterno=${apallidoP}&apeMaterno=${apellidoM}&correo=${correo}&codigoPersona=2`
 
         let url = urlBase + urlEnd
         const response = await fetch(url,{
@@ -37,7 +37,7 @@ export const useConexBD = () => {
     }
 
     const registrarUsuario = async (nombre, clave, codPersona) => {
-        let urlEnd = `/registrarUsuario?nombre=${nombre}&clave=${clave}&codPersona=${codPersona}&codUsuarioTipo=1`  //creo que el 1 es el admin
+        let urlEnd = `/registrarUsuario?nombre=${nombre}&clave=${clave}&codPersona=${codPersona}&codUsuarioTipo=4`  //creo que el 1 es el admin
 
         let url = urlBase + urlEnd
         const response = await fetch(url,{

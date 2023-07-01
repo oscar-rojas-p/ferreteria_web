@@ -72,7 +72,7 @@ export const Login = () => {
             )
             if(user){
                 notify(`Bienvenido a Alpa usuario: ${usuario}`,'success')
-                cambiarVista()
+                cambiarVista(user.codUsuarioTipo)
             }else{
                 notify('Error al ingresar usuario y/o contraseña','error')
             }
@@ -81,8 +81,12 @@ export const Login = () => {
 
         //setUser([nombre])  
     }
-    const cambiarVista = () =>{
-        history.push('/Productos')
+    const cambiarVista = (codigoUser) =>{
+        if(codigoUser == 1){
+            history.push('/Administrador')
+        }else if(codigoUser == 4){
+            history.push('/Productos')
+        }
     }
     const [open, setOpen] = React.useState(false);
 
@@ -110,6 +114,7 @@ export const Login = () => {
             listarPersonas()
             notify(`Usuario ${nomNew} registrado con exito`,'success')
             handleClose()
+            // history.push('/Productos')
         }
     }
 
