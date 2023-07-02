@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-
+import { Modal } from "../app/components/modal/Modal";
+import { useModal } from "./useModal";
 const urlBase = process.env.REACT_APP_ATU_API + "/api/Ferreteria";
 
 export const useConexBD = () => {
     const [usuarios,setUsuarios] = useState([])
     const [personas,setPersonas] = useState([])
     const [productos,setProductos] = useState([])
-
+    const [ isOpenProductos, openModalProductos, closeModalProductos ] = useModal();
     const listarPersonas = async () => {
         await fetch(`${urlBase}/listarPersonas`).then(response => {
             response.json().then((data) => {
@@ -70,5 +71,5 @@ export const useConexBD = () => {
         })
     }
     
-    return {personas,listarPersonas,registrarPersona,usuarios,listarUsuarios,registrarUsuario,productos,listarProductos,registrarProducto}
+    return {personas,listarPersonas,registrarPersona,usuarios,listarUsuarios,registrarUsuario,productos,listarProductos,registrarProducto,isOpenProductos,openModalProductos,closeModalProductos}
 }

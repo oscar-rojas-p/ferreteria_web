@@ -1,5 +1,9 @@
-
+import { useConexBD } from "../../hooks/useConexBD"
+import { Login } from "../pages/Login"
+import { Modal} from '../components/modal/Modal'
+import { useModal } from "../../hooks/useModal"
 export const BodyAdministrador = () =>{
+    const {productos,listarProductos,registrarProducto,isOpenProductos,openModalProductos,closeModalProductos} =useConexBD()
     const Productos =[
         {codProducto:'1',nomProducto:'Cemento Sol',cantidadActual:'40',cantidadMinima:'5 unidades',cantidadMaxima:'50 unidades',precioCompra:'25.00',precioVenta:'35.00'},
         {codProducto:'2',nomProducto:'Cemento Pacasmayo',cantidadActual:'40',cantidadMinima:'5 unidades',cantidadMaxima:'50 unidades',precioCompra:'28.00',precioVenta:'38.00'},
@@ -17,6 +21,9 @@ export const BodyAdministrador = () =>{
         {codProducto:'14',nomProducto:'Caja de tornillos plano',cantidadActual:'5',cantidadMinima:'2',cantidadMaxima:'10',precioCompra:'95.00',precioVenta:'115.00'},
         {codProducto:'15',nomProducto:'Chapa clásica',cantidadActual:'5',cantidadMinima:'2',cantidadMaxima:'10',precioCompra:'95.00',precioVenta:'115.00'},
     ]
+    const abrirModal = ()=>{
+        openModalProductos();
+    }
     return(
         <>
             <div className="bg-black"> 
@@ -33,8 +40,14 @@ export const BodyAdministrador = () =>{
                     </nav>
                 </div>
                 <div>
-                    <div className="w-full h-[15%] p-2">
+                    <div className="w-full h-[15%] p-2 flex items-center">
                         <label className="text-2xl font-bold ">Panel de Control</label>
+                        <div className="pl-4">
+                            <button onClick={()=>{abrirModal()}} className="cursor-pointer p-2 rounded-3xl border-2 border-white bg-blue-600">
+                                <label className=" cursor-pointer font-bold">Nuevo</label>
+                                <i className="fa fa-plus pl-2 text-orange-600"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div className="p-2 h-[100%]">
@@ -51,8 +64,8 @@ export const BodyAdministrador = () =>{
                             <th className="bg-[#2e5289]"></th>
                         </thead>
                         <tbody>
-                            {
-                                Productos.map((data,i)=>{
+                            {   productos.length >0?
+                                productos.map((data,i)=>{
                                     return(
                                         <tr>
                                             <td className="text-center">{i+1}</td>
@@ -75,12 +88,50 @@ export const BodyAdministrador = () =>{
                                         </tr>
                                     )
                                     
-                                })
+                                }):<tr><td colspan="8" className="text-center">Sin productos registrados...</td></tr>
                             }
                         </tbody>
                     </table>
                 </div>
             </div>
+            <Modal title={'Registrar Producto'} isOpen={isOpenProductos} closeModal={closeModalProductos}>
+                    <div className="flex flex-col w-full h-full">
+                            <div className="flex">
+                                <div className="p-2 w-[35%]">
+                                    <label className="">Nombre</label>
+                                </div>
+                                <div className="p-2 w-[65%]">
+                                    <input className=""></input>
+                                </div>
+                            </div>
+                            <div className="flex">
+                            <div className="p-2 w-[35%]">
+                                    <label className="">Abreviatura</label>
+                                </div>
+                                <div className="p-2 w-[65%]">
+                                    <input className=""></input>
+                                </div>
+                            </div>
+                            <div className="flex">
+                                <div className="p-2 w-[35%]">
+                                    <label className="">Codigo</label>
+                                </div>
+                                <div className="p-2 w-[65%]">
+                                    <input className=""></input>
+                                </div>
+                                
+                            </div>
+                            <div className="flex">
+                                <div className="p-2 w-[35%]">
+                                    <label className="">Descripcion</label>
+                                </div>
+                                <div className="p-2 w-[65%]">
+                                    <input className=""></input>
+                                </div>
+                            </div>
+                            
+                    </div>       
+            </Modal>
         </>
     )
 }
