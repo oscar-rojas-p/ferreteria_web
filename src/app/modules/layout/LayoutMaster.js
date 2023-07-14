@@ -35,7 +35,7 @@ export const LayoutMaster = ({children}) => {
 
     return (
         <>
-            <div className=" dark:text-white">
+            <div className=" dark:text-white h-screen">
                 <div className="main  overflow-auto">
                         {children}
                 </div>

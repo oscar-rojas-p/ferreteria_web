@@ -1,12 +1,28 @@
 import React, { useState } from "react";
 import { Modal } from "../app/components/modal/Modal";
 import { useModal } from "./useModal";
+import { notify } from "../utils/utils";
 const urlBase = process.env.REACT_APP_ATU_API + "/api/Ferreteria";
 
 export const useConexBD = () => {
+    const productoDefault = {
+        nomProducto: '',
+        abrevProducto: '',
+        codigoProducto: 0,
+        descripcionProducto: '',
+        codSubCategoria: 0,
+        cantidadMinima:0,
+        cantidadMaxima: 0,
+        precioCompra:'',    
+        precioVenta:'',  
+        codMonedaCompra:'',    
+        codMonedaVenta:'',    
+        codUsuarioCreacion:0  
+    }
     const [usuarios,setUsuarios] = useState([])
     const [personas,setPersonas] = useState([])
     const [productos,setProductos] = useState([])
+    const [producto, setProducto ] = useState(productoDefault);
     const [ isOpenProductos, openModalProductos, closeModalProductos ] = useModal();
     const listarPersonas = async () => {
         await fetch(`${urlBase}/listarPersonas`).then(response => {
@@ -59,9 +75,8 @@ export const useConexBD = () => {
         })
     }
 
-    const registrarProducto = async (nomProducto,abrevProducto,descripcionProducto,codigoProducto,codSubCategoria,cantidadMinima,cantidadMaxima,precioCompra,precioVenta,codMonedaCompra,codMonedaVenta,codUsuarioCreacion) => {
-        let urlEnd = `/registrarProducto?nomProducto=${nomProducto}&abrevProducto=${abrevProducto}&descripcionProducto=${descripcionProducto}&codigoProducto=${codigoProducto}&codSubCategoria=${codSubCategoria}&cantidadMinima=${cantidadMinima}&cantidadMaxima=${cantidadMaxima}&precioCompra=${precioCompra}&precioVenta=${precioVenta}&codMonedaCompra=${codMonedaCompra}&codMonedaVenta=${codMonedaVenta}&codUsuarioCreacion=${codUsuarioCreacion}`
-
+    const registrarProducto = async () => {
+        let urlEnd = `/registrarProducto?nomProducto=${producto.nomProducto}&abrevProducto=${producto.abrevProducto}&descripcionProducto=${producto.descripcionProducto}&codigoProducto=${producto.codigoProducto}&codSubCategoria=${producto.codSubCategoria}&cantidadMinima=${producto.cantidadMinima}&cantidadMaxima=${producto.cantidadMaxima}&precioCompra=${producto.precioCompra}&precioVenta=${producto.precioVenta}&codMonedaCompra=${producto.codMonedaCompra}&codMonedaVenta=${producto.codMonedaVenta}&codUsuarioCreacion=${producto.codUsuarioCreacion}`
         let url = urlBase + urlEnd
         const response = await fetch(url,{
             method:'POST',
@@ -69,7 +84,19 @@ export const useConexBD = () => {
                 'Content-Type':'application/json'
             }
         })
+        notify(response.content, response.isValid? 'success' : 'error');
+        if (response.isValid){
+            await listarProductos();
+            closeModalProductos()
+        }
     }
-    
-    return {personas,listarPersonas,registrarPersona,usuarios,listarUsuarios,registrarUsuario,productos,listarProductos,registrarProducto,isOpenProductos,openModalProductos,closeModalProductos}
+    const editarValorProducto = (key,value) =>{
+        setProducto(producto => {
+            return {
+                ...producto,
+                [key]: value
+            }
+        });
+    }
+    return {personas,listarPersonas,producto,editarValorProducto,registrarPersona,usuarios,listarUsuarios,registrarUsuario,productos,listarProductos,registrarProducto,isOpenProductos,openModalProductos,closeModalProductos}
 }

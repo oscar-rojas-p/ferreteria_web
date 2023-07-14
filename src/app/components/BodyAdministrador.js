@@ -3,7 +3,7 @@ import { Login } from "../pages/Login"
 import { Modal} from '../components/modal/Modal'
 import { useModal } from "../../hooks/useModal"
 export const BodyAdministrador = () =>{
-    const {productos,listarProductos,registrarProducto,isOpenProductos,openModalProductos,closeModalProductos} =useConexBD()
+    const {productos,listarProductos,registrarProducto,producto,editarValorProducto,isOpenProductos,openModalProductos,closeModalProductos} =useConexBD()
     const Productos =[
         {codProducto:'1',nomProducto:'Cemento Sol',cantidadActual:'40',cantidadMinima:'5 unidades',cantidadMaxima:'50 unidades',precioCompra:'25.00',precioVenta:'35.00'},
         {codProducto:'2',nomProducto:'Cemento Pacasmayo',cantidadActual:'40',cantidadMinima:'5 unidades',cantidadMaxima:'50 unidades',precioCompra:'28.00',precioVenta:'38.00'},
@@ -94,39 +94,66 @@ export const BodyAdministrador = () =>{
                     </table>
                 </div>
             </div>
-            <Modal title={'Registrar Producto'} isOpen={isOpenProductos} closeModal={closeModalProductos}>
+            <Modal title={'Registrar Producto'} isOpen={isOpenProductos} closeModal={closeModalProductos} action={registrarProducto}>
                     <div className="flex flex-col w-full h-full">
-                            <div className="flex">
-                                <div className="p-2 w-[35%]">
+                            <div className="w-full flex">
+                                <div className="w-[50%] flex flex-col px-1">
                                     <label className="">Nombre</label>
+                                    <input className="text-black" onChange={(e) => editarValorProducto("nomProducto", e.target.value)}></input>
                                 </div>
-                                <div className="p-2 w-[65%]">
-                                    <input className=""></input>
-                                </div>
-                            </div>
-                            <div className="flex">
-                            <div className="p-2 w-[35%]">
+                                <div className="w-[50%] flex flex-col px-1">
                                     <label className="">Abreviatura</label>
-                                </div>
-                                <div className="p-2 w-[65%]">
-                                    <input className=""></input>
+                                    <input className="text-black" onChange={(e) => editarValorProducto("abrevProducto", e.target.value)}></input>
                                 </div>
                             </div>
-                            <div className="flex">
-                                <div className="p-2 w-[35%]">
+                            <div className="w-full flex ">
+                                <div className="w-[50%] flex flex-col px-1">
                                     <label className="">Codigo</label>
+                                    <input className="text-black" onChange={(e) => editarValorProducto("codigoProducto", e.target.value)}></input>
                                 </div>
-                                <div className="p-2 w-[65%]">
-                                    <input className=""></input>
-                                </div>
-                                
-                            </div>
-                            <div className="flex">
-                                <div className="p-2 w-[35%]">
+                                <div className="w-[50%] flex flex-col px-1">
                                     <label className="">Descripcion</label>
+                                    <input className="text-black" onChange={(e) => editarValorProducto("descripcionProducto", e.target.value)}></input>
                                 </div>
-                                <div className="p-2 w-[65%]">
-                                    <input className=""></input>
+                            </div>
+                            <div className="w-full flex">
+                                <div className="w-[50%] flex flex-col px-1">
+                                    <label className="">Código SubCategoria</label>
+                                    <input className="text-black" onChange={(e) => editarValorProducto("codSubCategoria", e.target.value)}></input>
+                                </div>
+                                <div className="w-[50%] flex flex-col px-1">
+                                    <label className="">Cantidad Minima</label>
+                                    <input className="text-black" onChange={(e) => editarValorProducto("cantidadMinima", e.target.value)}></input>
+                                </div>
+                            </div>
+                            <div className="w-full flex">
+                                <div className="w-[50%] flex flex-col px-1">
+                                    <label className="">Cantidad Maxima</label>
+                                    <input className="text-black" onChange={(e) => editarValorProducto("cantidadMaxima", e.target.value)}></input>
+                                </div>
+                                <div className="w-[50%] flex flex-col px-1">
+                                    <label className="">Precio Compra</label>
+                                    <input className="text-black" onChange={(e) => editarValorProducto("precioCompra", e.target.value)}></input>
+                                </div>
+                            </div>
+                            <div className="w-full flex">
+                                <div className="w-[50%] flex flex-col px-1">
+                                    <label className="">Precio Venta</label>
+                                    <input className="text-black" onChange={(e) => editarValorProducto("precioVenta", e.target.value)}></input>
+                                </div>
+                                <div className="w-[50%] flex flex-col px-1">
+                                    <label className="">Codigo Moneda Compra</label>
+                                    <input className="text-black" onChange={(e) => editarValorProducto("codMonedaCompra", e.target.value)}></input>
+                                </div>
+                            </div>
+                            <div className="w-full flex">
+                                <div className="w-[50%] flex flex-col px-1">
+                                    <label className="">Codigo Moneda Venta</label>
+                                    <input className="text-black" onChange={(e) => editarValorProducto("codMonedaVenta", e.target.value)}></input>
+                                </div>
+                                <div className="w-[50%] flex flex-col px-1">
+                                    <label className="">Codigo Usuario Creacion</label>
+                                    <input className="text-black" onChange={(e) => editarValorProducto("codUsuarioCreacion", e.target.value)}></input>
                                 </div>
                             </div>
                             

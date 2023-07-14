@@ -87,6 +87,9 @@ export const Login = () => {
         }else if(codigoUser == 4){
             history.push('/Productos')
         }
+        else{
+            history.push('/Administrador')
+        }
     }
     const [open, setOpen] = React.useState(false);
 
