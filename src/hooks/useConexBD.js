@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal } from "../app/components/modal/Modal";
 import { useModal } from "./useModal";
 import { notify } from "../utils/utils";
+import { responsiveFontSizes } from "@mui/material";
 const urlBase = process.env.REACT_APP_ATU_API + "/api/Ferreteria";
 
 export const useConexBD = () => {
@@ -83,12 +84,16 @@ export const useConexBD = () => {
             headers:{
                 'Content-Type':'application/json'
             }
+        }).then(response => {
+            response.json().then((data) => {
+                console.log("data -> ",data)
+                notify(data.content[0].desResultado, data.isValid? 'success' : 'error');
+                if (data.isValid){
+                    listarProductos();
+                    closeModalProductos()
+                }
+            })
         })
-        notify(response.content, response.isValid? 'success' : 'error');
-        if (response.isValid){
-            await listarProductos();
-            closeModalProductos()
-        }
     }
     const editarValorProducto = (key,value) =>{
         setProducto(producto => {
